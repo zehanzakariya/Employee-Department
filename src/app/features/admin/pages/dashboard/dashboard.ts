@@ -77,6 +77,7 @@ export class Dashboard {
   pendingEmployees = signal<PendingEmployee[]>([]);
   totalProjects = signal(0); 
   projectsDueThisWeek = signal(0); 
+  hello=signal(0);
   
   leaveApplications: LeaveApplication[] = [
     { id: 1, name: 'Thomas Goodman', status: 'Approved', date: '2024-01-15', type: 'Annual' },
