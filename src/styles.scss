@@ -1,1 +1,67 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', Roboto, 'Helvetica Neue', sans-serif;
+  background-color: var(--mat-sys-surface, #f8fafc);
+  color: var(--mat-sys-on-surface, #1f2937);
+}
+
+// -------------------------------
+// Toast Styles
+// -------------------------------
+// Make sure toast container always sticks to the viewport
+#toast-container {
+  position: fixed !important;
+  z-index: 9999 !important;
+}
+
+// Override position (already using .toast-top-right)
+.toast-top-right {
+  top: 20px !important;
+  right: 20px !important;
+  position: fixed !important;   // 👈 Force fixed
+}
+
+
+.custom-toast {
+  border-radius: 50px !important;
+  padding: 14px 28px !important;
+  min-width: 280px;
+  max-width: 400px;
+  font-size: 14px !important;
+  font-weight: 600;
+  text-align: center;
+  color: #fff !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  opacity: 0.95;
+  transform: scale(0.8);
+  animation: popIn 0.3s forwards;
+}
+
+.custom-toast.toast-success { background: linear-gradient(135deg, #43a047, #2e7d32) !important; }
+.custom-toast.toast-error   { background: linear-gradient(135deg, #e53935, #c62828) !important; }
+.custom-toast.toast-info    { background: linear-gradient(135deg, #2196f3, #1976d2) !important; }
+.custom-toast.toast-warning { background: linear-gradient(135deg, #ff9800, #f57c00) !important; }
+
+@keyframes popIn {
+  to { transform: scale(1); }
+}
+
+// -------------------------------
+// Material Theme
+// -------------------------------
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: (
+      brand-family: 'Inter, Roboto, "Helvetica Neue", sans-serif',
+      plain-family: 'Inter, Roboto, "Helvetica Neue", sans-serif',
+    ),
+    density: 0,
+  ));
+}

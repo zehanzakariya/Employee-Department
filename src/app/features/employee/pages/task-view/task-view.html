@@ -1,0 +1,148 @@
+<div class="task-view-container">
+  <div class="header">
+    <h1>My Tasks</h1>
+  </div>
+
+  @if (loading) {
+    <div class="loading-spinner">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading tasks...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-message">
+      <mat-icon>error</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="refreshTasks()">
+        Try Again
+      </button>
+    </div>
+  }
+
+  @if (employeeTasks && !loading) {
+    <div class="employee-info">
+      <h2>{{ employeeTasks.fullName }}'s Tasks</h2>
+      <p class="employee-email">{{ employeeTasks.email }}</p>
+    </div>
+
+    @if (employeeTasks.tasks.length === 0) {
+      <div class="no-tasks">
+        <mat-icon>assignment</mat-icon>
+        <h3>No tasks assigned</h3>
+        <p>You don't have any tasks assigned to you yet.</p>
+      </div>
+    } @else {
+      <div class="tasks-grid">
+        @for (task of employeeTasks.tasks; track task.taskItemId) {
+          <mat-card class="task-card" [class]="getPriorityClass(task.taskPriorityName)">
+            <mat-card-header>
+              <mat-card-title>{{ task.taskName }}</mat-card-title>
+              <mat-card-subtitle>
+                Project: {{ task.projectName || 'N/A' }}
+              </mat-card-subtitle>
+              
+              <!-- REMOVED DUPLICATE MAT-CARD -->
+              <div class="card-badges">
+                <span class="priority-badge" [class]="getPriorityClass(task.taskPriorityName)">
+                  {{ getDisplayPriority(task.taskPriorityName) }}
+                </span>
+                <span class="status-badge" [class]="getStatusClass(task.taskStatusName)">
+                  {{ task.taskStatusName }}
+                </span>
+                @if (isTaskCompleted(task)) {
+                  <span class="completed-badge" title="Task completed - status cannot be changed">
+                    <mat-icon>lock</mat-icon>
+                    Locked
+                  </span>
+                }
+              </div>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <p class="task-description">{{ task.description || 'No description provided' }}</p>
+              
+              <div class="task-details">
+                <div class="detail-item">
+                  <mat-icon>event</mat-icon>
+                  <span>Deadline: {{ task.deadline | date:'mediumDate' }}</span>
+                </div>
+                
+                @if (task.estimatedTime) {
+                  <div class="detail-item">
+                    <mat-icon>timer</mat-icon>
+                    <span>Estimated: {{ task.estimatedTime }} hours</span>
+                  </div>
+                }
+                
+                @if (task.spentTime) {
+                  <div class="detail-item">
+                    <mat-icon>av_timer</mat-icon>
+                    <span>Time spent: {{ task.spentTime }} hours</span>
+                  </div>
+                }
+                
+                @if (task.startDate) {
+                  <div class="detail-item">
+                    <mat-icon>play_arrow</mat-icon>
+                    <span>Started: {{ task.startDate | date:'mediumDate' }}</span>
+                  </div>
+                }
+                
+                @if (task.dueDate) {
+                  <div class="detail-item">
+                    <mat-icon>flag</mat-icon>
+                    <span>Due: {{ task.dueDate | date:'mediumDate' }}</span>
+                  </div>
+                }
+              </div>
+            </mat-card-content>
+            
+            <mat-card-actions class="task-actions">
+              <!-- Status Dropdown -->
+              <div class="status-selector">
+                <mat-form-field appearance="outline" class="status-dropdown">
+                  <mat-label>Status</mat-label>
+                  <mat-select [value]="getStatusId(task.taskStatusName)" 
+                              (selectionChange)="onStatusChange(task, $event.value)"
+                              [disabled]="!canUpdateTask(task) || updatingStatus || isTaskCompleted(task)">
+                    @for (status of getAvailableStatuses(task); track status.taskStatusId) {
+                      <mat-option [value]="status.taskStatusId">
+                        {{ status.taskStatusName }}
+                        @if (isTaskCompleted(task) && status.taskStatusId !== 3) {
+                          <span class="option-disabled-text"> - Not available for completed tasks</span>
+                        }
+                      </mat-option>
+                    }
+                  </mat-select>
+                  
+                  @if (isTaskCompleted(task)) {
+                    <mat-hint class="completed-hint">
+                      <mat-icon>lock</mat-icon> Status locked - task completed
+                    </mat-hint>
+                  }
+                </mat-form-field>
+                
+                @if (updatingStatus) {
+                  <mat-spinner diameter="20" class="status-spinner"></mat-spinner>
+                }
+              </div>
+              
+              <div class="task-meta">
+                <small>Created: {{ task.createdDate | date:'mediumDate' }}</small>
+                @if (task.assignedByUserName) {
+                  <small>Assigned by: {{ task.assignedByUserName }}</small>
+                }
+                @if (isTaskCompleted(task)) {
+                  <small class="completed-info">
+                    <mat-icon>check_circle</mat-icon> Completed - Final status
+                  </small>
+                }
+              </div>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+    }
+  }
+</div>

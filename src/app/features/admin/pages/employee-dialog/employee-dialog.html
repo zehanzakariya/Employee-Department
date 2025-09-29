@@ -1,0 +1,255 @@
+<h2 mat-dialog-title>{{ data ? 'Edit Employee' : 'Add Employee' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <div class="section-header">
+      <h3>Basic Information</h3>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Full Name</mat-label>
+        <input 
+          matInput 
+          formControlName="FullName" 
+          [maxlength]="FULL_NAME_MAX_LENGTH"
+          placeholder="Enter full name"
+        />
+        <mat-hint align="end">{{ fullName?.value?.length || 0 }}/{{ FULL_NAME_MAX_LENGTH }}</mat-hint>
+        
+        @if (fullName?.hasError('required')) {
+          <mat-error>Full name is required</mat-error>
+        }
+        @if (fullName?.hasError('maxlength')) {
+          <mat-error>Full name cannot exceed {{ FULL_NAME_MAX_LENGTH }} characters</mat-error>
+        }
+        @if (fullName?.hasError('pattern')) {
+          <mat-error>Full name can only contain letters, spaces, apostrophes, hyphens, and dots</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input 
+          matInput 
+          formControlName="Email" 
+          type="email" 
+          [maxlength]="EMAIL_MAX_LENGTH"
+          placeholder="Enter email address"
+        />
+        <mat-hint align="end">{{ email?.value?.length || 0 }}/{{ EMAIL_MAX_LENGTH }}</mat-hint>
+        
+        @if (email?.hasError('required')) {
+          <mat-error>Email is required</mat-error>
+        }
+        @if (email?.hasError('email')) {
+          <mat-error>Please enter a valid email address</mat-error>
+        }
+        @if (email?.hasError('maxlength')) {
+          <mat-error>Email cannot exceed {{ EMAIL_MAX_LENGTH }} characters</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username</mat-label>
+        <input 
+          matInput 
+          formControlName="Username" 
+          [maxlength]="USERNAME_MAX_LENGTH"
+          placeholder="Enter username"
+        />
+        <mat-hint align="end">{{ username?.value?.length || 0 }}/{{ USERNAME_MAX_LENGTH }}</mat-hint>
+        
+        @if (username?.hasError('required')) {
+          <mat-error>Username is required</mat-error>
+        }
+        @if (username?.hasError('maxlength')) {
+          <mat-error>Username cannot exceed {{ USERNAME_MAX_LENGTH }} characters</mat-error>
+        }
+        @if (username?.hasError('pattern')) {
+          <mat-error>Username can only contain letters, numbers, dots, underscores, and hyphens</mat-error>
+        }
+      </mat-form-field>
+    </div> -->
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Phone Number</mat-label>
+        <input 
+          matInput 
+          formControlName="PhoneNo" 
+          [maxlength]="PHONE_MAX_LENGTH"
+          placeholder="Enter phone number"
+        />
+        <mat-hint align="end">{{ phoneNo?.value?.length || 0 }}/{{ PHONE_MAX_LENGTH }}</mat-hint>
+        
+        @if (form.get('PhoneNo')?.hasError('required')) {
+          <mat-error>Phone number is required</mat-error>
+        }
+        @if (form.get('PhoneNo')?.hasError('pattern')) {
+          <mat-error>Please enter a valid 10-digit phone number</mat-error>
+        }
+        @if (phoneNo?.hasError('maxlength')) {
+          <mat-error>Phone number cannot exceed {{ PHONE_MAX_LENGTH }} characters</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Department</mat-label>
+        <mat-select formControlName="DepartmentId">
+          <mat-option value="">Select Department</mat-option>
+          @for (dept of departments; track dept.departmentId) {
+            <mat-option [value]="dept.departmentId">
+              {{ dept.departmentName }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (departmentId?.hasError('required')) {
+          <mat-error>Department is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Status -->
+    <div class="section-header">
+      <h3>Status</h3>
+    </div>
+
+    <div class="form-row status-row">
+      <mat-checkbox formControlName="IsActive" class="status-checkbox">
+        Active Employee
+      </mat-checkbox>
+      
+      <!-- <mat-checkbox formControlName="IsProfileCompleted" class="status-checkbox">
+        Profile Completed
+      </mat-checkbox> -->
+    </div>
+
+    <!-- Documents -->
+    <div class="section-header">
+      <h3>Documents</h3>
+      <span class="section-subtitle">Upload or update employee documents</span>
+      <div class="file-restrictions">
+        <small>Allowed formats: PDF, DOC, DOCX, JPEG, PNG, GIF, WEBP | Max size: 5MB per file</small>
+      </div>
+    </div>
+
+    <div class="documents-grid">
+      @for (doc of documentTypes; track doc.key) {
+        @let documentPath = getDocumentPath(doc.key);
+        @let hasNewFile = !!selectedFiles[doc.formControlName];
+        <div class="document-item">
+          <div class="document-info">
+            <span class="document-label">{{ doc.label }}</span>
+            <div class="document-status">
+              @if (hasNewFile) {
+                <span class="status-new">New file selected</span>
+              } @else if (documentPath) {
+                <span class="status-uploaded">Uploaded</span>
+              } @else {
+                <span class="status-missing">Not Uploaded</span>
+              }
+            </div>
+          </div>
+          
+          <div class="document-actions">
+            @if (documentPath && !hasNewFile) {
+              <button 
+                mat-icon-button 
+                color="primary" 
+                (click)="viewDocument(documentPath, doc.label)"
+                matTooltip="View Document"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button 
+                mat-icon-button 
+                color="accent" 
+                (click)="downloadDocument(documentPath, doc.label)"
+                matTooltip="Download"
+              >
+                <mat-icon>download</mat-icon>
+              </button>
+            }
+            
+            @if (hasNewFile) {
+              <button 
+                mat-icon-button 
+                color="warn" 
+                (click)="removeSelectedFile(doc.formControlName)"
+                matTooltip="Remove selected file"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+            
+            <div class="file-upload-wrapper">
+              <input 
+                type="file" 
+                id="{{doc.formControlName}}" 
+                (change)="onFileSelected($event, doc.formControlName)"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp"
+                hidden
+              >
+              <label for="{{doc.formControlName}}" mat-raised-button color="primary" class="upload-btn">
+                <mat-icon>{{ hasNewFile ? 'swap_horiz' : 'upload' }}</mat-icon>
+                {{ hasNewFile ? 'Change' : 'Upload' }}
+              </label>
+            </div>
+          </div>
+
+          @if (hasNewFile) {
+            <div class="selected-file-info">
+              <mat-icon>attachment</mat-icon>
+              <span class="file-name">{{ selectedFiles[doc.formControlName].name }}</span>
+              <span class="file-size">({{ (selectedFiles[doc.formControlName].size / 1024 / 1024).toFixed(2) }} MB)</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- System Information - Read-only -->
+    @if (data) {
+      <div class="section-header">
+        <h3>System Information</h3>
+      </div>
+
+      <div class="read-only-info">
+        <div class="info-item">
+          <span class="info-label">Employee ID:</span>
+          <span class="info-value">{{ data.employeeId }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Current Department:</span>
+          <span class="info-value">{{ data.departmentName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Profile Status:</span>
+          <span class="info-value">{{ data.isProfileCompleted ? 'Complete' : 'Incomplete' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Account Status:</span>
+          <span class="info-value">{{ data.isActive ? 'Active' : 'Inactive' }}</span>
+        </div>
+      </div>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()" [disabled]="loading">Cancel</button>
+  <button mat-flat-button color="primary" (click)="save()" [disabled]="form.invalid || loading">
+    @if (loading) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      {{ data ? 'Update' : 'Add' }}
+    }
+  </button>
+</mat-dialog-actions>

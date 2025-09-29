@@ -1,0 +1,84 @@
+<h2 mat-dialog-title>{{ data ? 'Edit Project' : 'Create Project' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Project Name</mat-label>
+      <input 
+        matInput 
+        formControlName="projectName" 
+        required 
+        [maxlength]="PROJECT_NAME_MAX_LENGTH"
+        placeholder="Enter project name"
+      />
+      <mat-hint align="end">{{ projectName?.value?.length || 0 }}/{{ PROJECT_NAME_MAX_LENGTH }}</mat-hint>
+      
+      @if (projectName?.touched && projectName?.invalid) {
+        <mat-error>{{ getValidationMessage('projectName') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea 
+        matInput 
+        formControlName="description" 
+        rows="3" 
+        [maxlength]="DESCRIPTION_MAX_LENGTH"
+        placeholder="Enter project description (optional)"
+      ></textarea>
+      <mat-hint align="end">{{ description?.value?.length || 0 }}/{{ DESCRIPTION_MAX_LENGTH }}</mat-hint>
+      
+      @if (description?.touched && description?.invalid) {
+        <mat-error>{{ getValidationMessage('description') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Deadline</mat-label>
+      <input 
+        matInput 
+        [matDatepicker]="deadlinePicker" 
+        formControlName="deadline" 
+        required
+        [min]="minDate"
+      />
+      <mat-datepicker-toggle matSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
+      <mat-datepicker #deadlinePicker></mat-datepicker>
+      
+      @if (deadline?.touched && deadline?.invalid) {
+        <mat-error>{{ getValidationMessage('deadline') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Department</mat-label>
+      <mat-select formControlName="departmentId" required>
+        <mat-option [value]="null">Select Department</mat-option>
+        @for (dept of departments; track dept.departmentId) {
+          <mat-option [value]="dept.departmentId">{{ dept.departmentName }}</mat-option>
+        }
+      </mat-select>
+      
+      @if (departmentId?.touched && departmentId?.invalid) {
+        <mat-error>{{ getValidationMessage('departmentId') }}</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button 
+    mat-raised-button 
+    color="primary" 
+    (click)="save()" 
+    [disabled]="form.invalid || loading"
+  >
+    @if (loading) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      {{ data ? 'Update' : 'Create' }}
+    }
+  </button>
+</mat-dialog-actions>

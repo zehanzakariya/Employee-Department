@@ -1,0 +1,98 @@
+<div class="landing-page">
+  <!-- Background Elements -->
+  <div class="background-elements">
+    <div class="gradient-overlay"></div>
+    <div class="floating-circle circle-1"></div>
+    <div class="floating-circle circle-2"></div>
+  </div>
+
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">
+          <mat-icon>database</mat-icon>
+        </div>
+        <span class="logo-text">EDMS</span>
+      </div>
+      <div class="badge glass">Modern EDMS Solutions</div>
+    </header>
+
+    <div class="content-grid">
+      <!-- Left Content -->
+      <div class="left-content">
+        <div class="hero-section">
+          <h1 class="hero-title">
+            Streamline Your
+            <span class="title-gradient">Employee & Department Management</span>
+          </h1>
+          <p class="hero-description">
+            Comprehensive platform for managing employees, departments, and organizational
+            workflows with advanced analytics and approval systems.
+          </p>
+        </div>
+
+        <!-- Feature Cards -->
+        <div class="features-grid">
+          <mat-card class="feature-card glass" *ngFor="let feature of features; let i = index">
+            <mat-card-content>
+              <div class="feature-content">
+                <div class="feature-icon">
+                  <mat-icon>{{feature.icon}}</mat-icon>
+                </div>
+                <div class="feature-details">
+                  <h3 class="feature-title">
+                    {{feature.title}}
+                    <mat-icon class="arrow-icon">arrow_right</mat-icon>
+                  </h3>
+                  <p class="feature-description">{{feature.description}}</p>
+                  <div class="feature-highlights">
+                    <div class="highlight" *ngFor="let highlight of feature.highlights">
+                      <mat-icon class="check-icon">check_circle</mat-icon>
+                      {{highlight}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat">
+            
+          </div>
+          <div class="stat">
+            
+          </div>
+          <div class="stat">
+           
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Content - Login Form -->
+      <div class="right-content">
+        <mat-card class="login-card glass">
+          <mat-card-header>
+            <mat-card-title class="welcome-title">Welcome Back</mat-card-title>
+            <mat-card-subtitle class="welcome-subtitle">
+              Access your HR management dashboard
+            </mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <mat-tab-group>
+              <mat-tab label="Sign In">
+                <app-login />
+              </mat-tab>
+              <mat-tab label="Register">
+                <app-register />
+              </mat-tab>
+            </mat-tab-group>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="login-container">
+  <div class="form-container">
+    <h1>Welcome Back</h1>
+    <p class="subtitle">Access your HR management dashboard</p>
+    
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" required type="email" />
+        <mat-icon matSuffix>email</mat-icon>
+        @if (f.email.hasError('required')) {
+          <mat-error>
+            Email is required
+          </mat-error>
+        }
+        @if (f.email.hasError('email') || f.email.hasError('pattern')) {
+          <mat-error>
+            Please enter a valid email address
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" required type="password" />
+        <mat-icon matSuffix>lock</mat-icon>
+        @if (f.password.hasError('required')) {
+          <mat-error>
+            Password is required
+          </mat-error>
+        }
+        @if (f.password.hasError('minlength')) {
+          <mat-error>
+            Password must be at least 6 characters
+          </mat-error>
+        }
+        @if (f.password.hasError('pattern')) {
+          <mat-error>
+            Password must contain at least 1 uppercase, 1 lowercase, and 1 number
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" [disabled]="form.invalid || busy" class="submit-button">
+        {{ busy ? 'Signing in...' : 'Sign In' }}
+      </button>
+
+      @if (pending) {
+        <div class="hint">
+          <mat-icon>info</mat-icon>
+          Your account is pending admin approval.
+        </div>
+      }
+    </form>
+  </div>
+</div>

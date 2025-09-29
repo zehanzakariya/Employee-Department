@@ -1,0 +1,102 @@
+
+<div class="tasks-page">
+    <header class="page-header">
+      <h1>Task Management</h1>
+      <p>Create and manage tasks for your projects</p>
+    </header>
+  
+    <div class="header-actions">
+      <div class="filters">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Status</mat-label>
+          <mat-select [(value)]="filterStatus" (selectionChange)="loadTasks()">
+            @for (status of statusOptions; track status.value) {
+              <mat-option [value]="status.value">{{ status.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Priority</mat-label>
+          <mat-select [(value)]="filterPriority" (selectionChange)="loadTasks()">
+            @for (priority of priorityOptions; track priority.value) {
+              <mat-option [value]="priority.value">{{ priority.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+  
+      <button mat-raised-button color="primary" (click)="openDialog()">
+        <mat-icon>add</mat-icon> New Task
+      </button>
+    </div>
+  
+    @if (!loading && filteredTasks.length) {
+      <div class="tasks-grid">
+        @for (task of filteredTasks; track task.taskItemId) {
+            <mat-card class="task-card" [class]="getPriorityClass(task.taskPriorityName)">
+              <mat-card-header>
+                <mat-card-title>{{ task.taskName }}</mat-card-title>
+                <mat-card-subtitle>
+                  Project: {{ task.projectName || 'N/A' }}
+                </mat-card-subtitle>
+                <div class="card-badges">
+                  <span class="priority-badge" [class]="getPriorityClass(task.taskPriorityName)">
+                    {{ task.taskPriorityName || 'Unknown' }}
+                  </span>
+                  <span class="status-badge" [class]="getStatusClass(task.taskStatusName)">
+                    {{ task.taskStatusName || 'Unknown' }}
+                  </span>
+                </div>
+              </mat-card-header>
+            
+            <mat-card-content>
+              <p class="task-description">{{ task.description || 'No description' }}</p>
+              
+              <div class="task-details">
+                <div class="detail-item">
+                  <mat-icon>person</mat-icon>
+                  <span>Assigned To: {{ task.assignedToEmployeeName || 'Unassigned' }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <mat-icon>event</mat-icon>
+                  <span>Deadline: {{ task.deadline | date:'mediumDate' }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <mat-icon>category</mat-icon>
+                  <span>Type: {{ task.taskTypeName }}</span>
+                </div>
+              </div>
+            </mat-card-content>
+            
+            <mat-card-actions align="end">
+              <button mat-button color="primary" (click)="openDialog(task)">
+                <mat-icon>edit</mat-icon> Edit
+              </button>
+              <button mat-button color="warn" (click)="deleteTask(task)">
+                <mat-icon>delete</mat-icon> Delete
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+    }
+  
+    @if (loading) {
+      <div class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    }
+  
+    @if (!loading && !filteredTasks.length) {
+      <div class="no-data">
+        <mat-icon>assignment</mat-icon>
+        <p>No tasks found</p>
+        <button mat-raised-button color="primary" (click)="openDialog()">
+          Create Your First Task
+        </button>
+      </div>
+    }
+  </div>

@@ -1,0 +1,138 @@
+<h2 mat-dialog-title>{{ data ? 'Edit Task' : 'Create Task' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Task Name</mat-label>
+      <input 
+        matInput 
+        formControlName="taskName" 
+        required 
+        [maxlength]="TASK_NAME_MAX_LENGTH"
+        placeholder="Enter task name"
+      />
+      <mat-hint align="end">{{ taskName?.value?.length || 0 }}/{{ TASK_NAME_MAX_LENGTH }}</mat-hint>
+      
+      @if (taskName?.touched && taskName?.invalid) {
+        <mat-error>{{ getValidationMessage('taskName') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea 
+        matInput 
+        formControlName="description" 
+        rows="3" 
+        placeholder="Task description..."
+        [maxlength]="DESCRIPTION_MAX_LENGTH"
+      ></textarea>
+      <mat-hint align="end">{{ description?.value?.length || 0 }}/{{ DESCRIPTION_MAX_LENGTH }}</mat-hint>
+      
+      @if (description?.touched && description?.invalid) {
+        <mat-error>{{ getValidationMessage('description') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Project</mat-label>
+        <mat-select formControlName="projectId" required>
+          <mat-option [value]="null">Select Project</mat-option>
+          @for (project of projects; track project.projectId) {
+            <mat-option [value]="project.projectId">{{ project.projectName }}</mat-option>
+          }
+        </mat-select>
+        
+        @if (projectId?.touched && projectId?.invalid) {
+          <mat-error>{{ getValidationMessage('projectId') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Assigned To</mat-label>
+        <mat-select formControlName="assignedToEmployeeId" required>
+          <mat-option [value]="null">Select Employee</mat-option>
+          @for (employee of employees; track employee.employeeId) {
+            <mat-option [value]="employee.employeeId">
+              {{ employee.fullName }} ({{ employee.email }})
+            </mat-option>
+          }
+        </mat-select>
+        
+        @if (assignedToEmployeeId?.touched && assignedToEmployeeId?.invalid) {
+          <mat-error>{{ getValidationMessage('assignedToEmployeeId') }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="taskPriorityId" required>
+          @for (priority of priorities; track priority.taskPriorityId) {
+            <mat-option [value]="priority.taskPriorityId">{{ priority.taskPriorityName }}</mat-option>
+          }
+        </mat-select>
+        
+        @if (taskPriorityId?.touched && taskPriorityId?.invalid) {
+          <mat-error>{{ getValidationMessage('taskPriorityId') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="taskTypeId" required>
+          <mat-option [value]="null">Select Type</mat-option>
+          @for (type of types; track type.taskTypeId) {
+            <mat-option [value]="type.taskTypeId">{{ type.taskTypeName }}</mat-option>
+          }
+        </mat-select>
+      
+        @if (taskTypeId?.touched && taskTypeId?.invalid) {
+          <mat-error>{{ getValidationMessage('taskTypeId') }}</mat-error>
+        }
+      </mat-form-field>
+      
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Deadline</mat-label>
+        <input 
+          matInput 
+          [matDatepicker]="deadlinePicker" 
+          formControlName="deadline" 
+          required
+          [min]="minDate"
+        />
+        <mat-datepicker-toggle matSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
+        <mat-datepicker #deadlinePicker></mat-datepicker>
+        
+        @if (deadline?.touched && deadline?.invalid) {
+          <mat-error>{{ getValidationMessage('deadline') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="taskStatusId" required>
+          @for (status of statuses; track status.taskStatusId) {
+            <mat-option [value]="status.taskStatusId">{{ status.taskStatusName }}</mat-option>
+          }
+        </mat-select>
+        
+        @if (taskStatusId?.touched && taskStatusId?.invalid) {
+          <mat-error>{{ getValidationMessage('taskStatusId') }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid || loading">
+    {{ loading ? 'Saving...' : (data ? 'Update' : 'Create') }}
+  </button>
+</mat-dialog-actions>

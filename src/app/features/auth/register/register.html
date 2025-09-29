@@ -1,0 +1,94 @@
+<div class="register-container">
+  <div class="form-container">
+    <h1>Employee Registration</h1>
+    <p class="subtitle">Create your account to get started</p>
+    
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+     
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="fullName" required maxlength="50" #fullNameInput>
+        <mat-hint align="end">{{fullNameInput.value.length}}/50</mat-hint>
+        <mat-icon matSuffix>person</mat-icon>
+        @if (form.get('fullName')?.touched && form.get('fullName')?.invalid) {
+          <mat-error>
+            {{ getErrorMessage('fullName') }}
+          </mat-error>
+        }
+      </mat-form-field>
+      
+    
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" required type="email" maxlength="100" #emailInput>
+        <mat-hint align="end">{{emailInput.value.length}}/100</mat-hint>
+        <mat-icon matSuffix>email</mat-icon>
+        @if (form.get('email')?.touched && form.get('email')?.invalid) {
+          <mat-error>
+            {{ getErrorMessage('email') }}
+          </mat-error>
+        }
+      </mat-form-field>
+      
+  
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dob" required [max]="maxDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (form.get('dob')?.touched && form.get('dob')?.invalid) {
+          <mat-error>
+            {{ getErrorMessage('dob') }}
+          </mat-error>
+        }
+      </mat-form-field>
+      
+    
+      <mat-form-field appearance="outline" class="w100">
+        <mat-label>Department</mat-label>
+        <mat-select formControlName="departmentId" required>
+          <mat-option [value]="0" disabled>Select Department</mat-option>
+          @for (d of depts; track d.departmentId) {
+            <mat-option [value]="d.departmentId">
+              {{ d.departmentName }}
+            </mat-option>
+          }
+        </mat-select>
+        <mat-icon matSuffix>business</mat-icon>
+        @if (form.get('departmentId')?.touched && form.get('departmentId')?.invalid) {
+          <mat-error>
+            {{ getErrorMessage('departmentId') }}
+          </mat-error>
+        }
+      </mat-form-field>
+
+  
+      <div class="form-field-group">
+        <label class="field-label">Gender</label>
+        <mat-radio-group formControlName="gender" class="gender-options">
+          <mat-radio-button value="Male" class="gender-option">Male</mat-radio-button>
+          <mat-radio-button value="Female" class="gender-option">Female</mat-radio-button>
+          <mat-radio-button value="Other" class="gender-option">Other</mat-radio-button>
+        </mat-radio-group>
+        @if (form.get('gender')?.touched && form.get('gender')?.invalid) {
+          <mat-error>
+            {{ getErrorMessage('gender') }}
+          </mat-error>
+        }
+      </div>
+
+   
+      <div class="note">
+        <mat-icon>info</mat-icon>
+        <div>
+          <strong>Note:</strong> Your registration will be reviewed by an administrator before account activation.
+        </div>
+      </div>
+
+   
+      <button mat-raised-button color="primary" [disabled]="form.invalid || busy" class="submit-button">
+        {{ busy ? 'Submitting...' : 'Submit Registration' }}
+      </button>
+    </form>
+  </div>
+</div>

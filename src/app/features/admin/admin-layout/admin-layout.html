@@ -1,0 +1,76 @@
+<div class="admin-dashboard">
+  <!-- Mobile Overlay -->
+  <div class="sidebar-overlay" [class.active]="mobileMenuOpen" (click)="closeMobileMenu()"></div>
+  
+  <div class="sidebar" [class.collapsed]="sidebarCollapsed" [class.mobile-open]="mobileMenuOpen">
+    <div class="sidebar-header">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <mat-icon>database</mat-icon>
+        </div>
+        @if (!sidebarCollapsed || mobileMenuOpen) {
+          <div class="logo-text">
+            <h2>EDMS</h2>
+            <span class="badge">Admin</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      @for (item of sidebarItems; track item.id) {
+        <a 
+          routerLink="/admin/{{item.id}}" 
+          routerLinkActive="active" 
+          [routerLinkActiveOptions]="{ exact: item.id === '' }"
+          class="nav-item"
+          (click)="closeMobileMenu()"
+        >
+          <mat-icon>{{item.icon}}</mat-icon>
+          @if (!sidebarCollapsed || mobileMenuOpen) {
+            <span class="nav-label">{{item.label}}</span>
+          }
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" (click)="logout(); closeMobileMenu()">
+        <mat-icon>logout</mat-icon>
+        @if (!sidebarCollapsed || mobileMenuOpen) {
+          <span>Logout</span>
+        }
+      </button>
+    </div>
+
+    <div class="toggle-btn" (click)="toggleSidebar()">
+      <mat-icon>{{ sidebarCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+    </div>
+  </div>
+
+  <div class="main-content" [class.collapsed]="sidebarCollapsed">
+    <header class="header">
+      <div class="header-left">
+        <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <h1>Admin</h1>
+        <p>Welcome back, manage your organization efficiently</p>
+      </div>
+      
+      <div class="header-right">
+        <div class="user-avatar">
+          <span>ED</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="footer">
+      <p>Employee Management System © 2024</p>
+    </footer>
+  </div>
+</div>

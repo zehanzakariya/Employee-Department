@@ -1,0 +1,121 @@
+<div class="department-page">
+  <header class="page-header">
+    <h1 class="page-title">Department Management</h1>
+    <p class="page-subtitle">Manage your organization's departments and structure</p>
+  </header>
+
+  <div class="page-controls">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search departments</mat-label>
+      <input matInput [(ngModel)]="searchText" placeholder="Search by department name or head">
+      <mat-icon matPrefix>search</mat-icon>
+      @if (searchText) {
+        <button matSuffix mat-icon-button (click)="searchText=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="openDialog()" class="add-button">
+      <mat-icon>add</mat-icon>
+      Add Department
+    </button>
+  </div>
+
+  @if (rows.length) {
+    <mat-card class="table-card">
+      <div class="table-container">
+        <table class="uniform-table">
+          <thead>
+            <tr class="table-header-row">
+              <th class="table-header">Department</th>
+              <th class="table-header">Head of Department</th>
+              <th class="table-header text-center">Employees</th>
+              <th class="table-header text-center">Status</th>
+              <th class="table-header text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (d of rows | search:searchText; track d.departmentId) {
+              <tr class="table-row">
+                <td class="table-cell">
+                  <div class="department-info">
+                    @if (d.imagePath) {
+                      <img [src]="d.imagePath" alt="{{d.departmentName}}" class="dept-image" />
+                    } @else {
+                      <div class="dept-placeholder">
+                        <mat-icon>business</mat-icon>
+                      </div>
+                    }
+                    <div class="dept-details">
+                      <span class="dept-name">{{ d.departmentName }}</span>
+                      <!-- @if (d.description) {
+                        <span class="dept-description" [title]="d.description">
+                          {{ d.description.length > 60 ? d.description.substring(0, 60) + '...' : d.description }}
+                        </span>
+                      } -->
+                    </div>
+                  </div>
+                </td>
+                <td class="table-cell">
+                  <span class="head-name">{{ d.headOfDepartment || 'Not assigned' }}</span>
+                </td>
+                <td class="table-cell text-center">
+                  <span class="employee-count">{{ d.employeeCount || 0 }}</span>
+                </td>
+                <td class="table-cell text-center">
+                  <span class="status-badge" [class]="d.status?.toLowerCase()">
+                    <mat-icon class="status-icon">
+                      {{ d.status === 'Active' ? 'check_circle' : 'cancel' }}
+                    </mat-icon>
+                    {{ d.status }}
+                  </span>
+                </td>
+                <td class="table-cell text-right">
+                  <div class="action-buttons">
+                    <button mat-stroked-button color="primary" (click)="openDialog(d)" class="action-btn edit-btn" matTooltip="edit department">
+                      <mat-icon>edit</mat-icon>
+                      Edit
+                    </button>
+                   @if(d.status=="Active"){
+                    <button mat-stroked-button color="warn" (click)="remove(d.departmentId, d.departmentName)" 
+                            [disabled]="d.employeeCount > 0" class="action-btn delete-btn"
+                            matTooltip="{{ d.employeeCount > 0 ? 'Cannot delete department with employees' : 'Delete department' }}">
+                      <mat-icon>delete</mat-icon>
+                      Delete
+                    </button>
+                  }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </mat-card>
+  }
+
+  @if (!rows.length) {
+    <mat-card class="empty-state-card">
+      <div class="empty-state">
+        <mat-icon class="empty-icon">business</mat-icon>
+        <h3>No Departments Found</h3>
+        <p>Get started by creating your first department</p>
+        <button mat-raised-button color="primary" (click)="openDialog()">
+          <mat-icon>add</mat-icon>
+          Create Department
+        </button>
+      </div>
+    </mat-card>
+  }
+
+  @if (rows.length && !(rows | search:searchText)?.length) {
+    <mat-card class="empty-search-card">
+      <div class="empty-search">
+        <mat-icon>search_off</mat-icon>
+        <h3>No matching departments</h3>
+        <p>Try adjusting your search criteria</p>
+      </div>
+    </mat-card>
+  }
+</div>

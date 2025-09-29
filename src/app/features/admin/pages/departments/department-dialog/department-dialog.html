@@ -1,0 +1,149 @@
+<h2 mat-dialog-title class="dialog-title">{{ data ? 'Edit Department' : 'Add Department' }}</h2>
+
+<div class="dialog-content">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="dialog-form" enctype="multipart/form-data">
+    
+    <!-- Department Name Field -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Department Name</mat-label>
+      <input matInput formControlName="departmentName" required 
+             [maxlength]="100" placeholder="Enter department name"/>
+      <mat-hint align="end">{{ form.get('departmentName')?.value?.length || 0 }}/100</mat-hint>
+      
+      @if (form.get('departmentName')?.touched && form.get('departmentName')?.invalid) {
+        <mat-error>
+          @if (form.get('departmentName')?.hasError('required')) {
+            Department name is required
+          }
+          @if (form.get('departmentName')?.hasError('minlength')) {
+            Department name must be at least 2 characters
+          }
+          @if (form.get('departmentName')?.hasError('maxlength')) {
+            Department name cannot exceed 100 characters
+          }
+          @if (form.get('departmentName')?.hasError('pattern')) {
+            Department name can only contain letters and spaces
+          }
+          @if (form.get('departmentName')?.hasError('firstTwoLetters')) {
+            First 2 characters must be letters
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Description Field -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="3" 
+                [maxlength]="500" placeholder="Enter department description (optional)"></textarea>
+      <mat-hint align="end">{{ form.get('description')?.value?.length || 0 }}/500</mat-hint>
+      
+      @if (form.get('description')?.touched && form.get('description')?.invalid) {
+        <mat-error>
+          @if (form.get('description')?.hasError('maxlength')) {
+            Description cannot exceed 500 characters
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Head of Department Field -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Head of Department</mat-label>
+      <input matInput formControlName="headOfDepartment" required
+             [maxlength]="100" placeholder="Enter head of department name"/>
+      <mat-hint align="end">{{ form.get('headOfDepartment')?.value?.length || 0 }}/100</mat-hint>
+      
+      @if (form.get('headOfDepartment')?.touched && form.get('headOfDepartment')?.invalid) {
+        <mat-error>
+          @if (form.get('headOfDepartment')?.hasError('required')) {
+            Head of Department is required
+          }
+          @if (form.get('headOfDepartment')?.hasError('minlength')) {
+            Head of Department must be at least 2 characters
+          }
+          @if (form.get('headOfDepartment')?.hasError('maxlength')) {
+            Head of Department cannot exceed 100 characters
+          }
+          @if (form.get('headOfDepartment')?.hasError('pattern')) {
+            Head of Department can only contain letters and spaces
+          }
+          @if (form.get('headOfDepartment')?.hasError('firstTwoLetters')) {
+            First 2 characters must be letters
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Status Field -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="Active">Active</mat-option>
+        <mat-option value="Inactive">Inactive</mat-option>
+      </mat-select>
+      
+      @if (form.get('status')?.touched && form.get('status')?.invalid) {
+        <mat-error>
+          @if (form.get('status')?.hasError('required')) {
+            Status is required
+          }
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Image Upload Section -->
+    <div class="image-upload-section">
+      <label class="upload-label">Department Image:</label>
+      
+      <div class="file-input-container">
+        <button mat-raised-button type="button" class="file-select-button" (click)="fileInput.click()">
+          <mat-icon>cloud_upload</mat-icon>
+          {{ data?.imagePath ? 'Change Image' : 'Upload Image' }}
+        </button>
+        <input #fileInput id="fileInput" type="file" (change)="onFileSelected($event)" accept="image/*" hidden />
+        
+        <!-- Show selected file name OR existing image name -->
+        <span class="file-name">
+          @if (selectedFile) {
+            {{ selectedFile.name }}
+          } @else if (data && data.imagePath) {
+            {{ getFilenameFromUrl(data.imagePath) }} (Existing Image)
+          } @else {
+            No file chosen
+          }
+        </span>
+        
+        @if (selectedFile) {
+          <button mat-icon-button type="button" (click)="clearFile()" title="Remove new image">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </div>
+    </div>
+
+    @if (previewUrl) {
+      <div class="preview-section">
+        <p class="preview-label">Image Preview:</p>
+        <div class="preview-container">
+          <img [src]="previewUrl" alt="Preview" class="preview-image" />
+          <div class="preview-actions">
+            @if (data && data.imagePath && !selectedFile) {
+              <button mat-raised-button color="primary" (click)="downloadImage()" class="download-btn">
+                <mat-icon>download</mat-icon> Download Image
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="dialog-actions">
+      <button mat-button type="button" (click)="onClose()" class="cancel-btn">Cancel</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" class="submit-btn">
+        <mat-icon>{{ data ? 'edit' : 'save' }}</mat-icon>
+        {{ data ? 'Update' : 'Save' }}
+      </button>
+    </div>
+  </form>
+</div>

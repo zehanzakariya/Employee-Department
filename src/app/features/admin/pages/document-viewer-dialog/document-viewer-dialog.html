@@ -1,0 +1,89 @@
+<div class="document-viewer-dialog">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Documents - {{ data.employeeName }}</h2>
+    <button mat-icon-button (click)="close()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    <mat-tab-group>
+      @for (document of data.documents; track document.name; let i = $index) {
+        <mat-tab [label]="document.name">
+          <div class="document-content">
+            @if (isImageFile(document.path)) {
+              <div class="image-container">
+                <img 
+                  [src]="getFullDocumentPath(document.path)" 
+                  [alt]="document.name"
+                  class="document-image"
+                  (error)="handleImageError($event)"
+                />
+                <div class="image-actions">
+                  <button 
+                    mat-flat-button 
+                    color="primary" 
+                    (click)="downloadDocument(document.path, document.name)"
+                    [disabled]="loading"
+                  >
+                    @if (loading) {
+                      <mat-spinner diameter="20"></mat-spinner>
+                    } @else {
+                      <mat-icon>download</mat-icon>
+                    }
+                    Download
+                  </button>
+                </div>
+              </div>
+            } @else if (isPdfFile(document.path)) {
+              <div class="pdf-container">
+                <iframe 
+                  [src]="getFullDocumentPath(document.path) + '#view=FitH'" 
+                  class="pdf-viewer"
+                  title="{{document.name}}"
+                ></iframe>
+                <div class="pdf-actions">
+                  <button 
+                    mat-flat-button 
+                    color="primary" 
+                    (click)="downloadDocument(document.path, document.name)"
+                    [disabled]="loading"
+                  >
+                    @if (loading) {
+                      <mat-spinner diameter="20"></mat-spinner>
+                    } @else {
+                      <mat-icon>download</mat-icon>
+                    }
+                    Download PDF
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <div class="unknown-file">
+                <mat-icon>description</mat-icon>
+                <p>File format not supported for preview</p>
+                <button 
+                  mat-flat-button 
+                  color="primary" 
+                  (click)="downloadDocument(document.path, document.name)"
+                  [disabled]="loading"
+                >
+                  @if (loading) {
+                    <mat-spinner diameter="20"></mat-spinner>
+                  } @else {
+                    <mat-icon>download</mat-icon>
+                  }
+                  Download File
+                </button>
+              </div>
+            }
+          </div>
+        </mat-tab>
+      }
+    </mat-tab-group>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close()">Close</button>
+  </mat-dialog-actions>
+</div>

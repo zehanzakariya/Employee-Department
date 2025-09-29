@@ -1,0 +1,32 @@
+.dialog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 8px 0;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .half-width {
+    width: calc(50% - 8px);
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  
+ 
+  @media (max-width: 600px) {
+    .form-row {
+      flex-direction: column;
+      gap: 16px;
+    }
+  
+    .half-width {
+      width: 100%;
+    }
+  }

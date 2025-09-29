@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Reject Employee</h2>
+<mat-dialog-content>
+  <p>Please provide a reason for rejection:</p>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Reason</mat-label>
+      <textarea matInput rows="3" formControlName="reason"></textarea>
+      @if (form.get('reason')?.invalid) {
+        <mat-error>
+          Reason is required (min 5 characters)
+        </mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancel</button>
+  <button mat-flat-button color="warn" [disabled]="form.invalid" (click)="submit()">
+    Reject
+  </button>
+</mat-dialog-actions>

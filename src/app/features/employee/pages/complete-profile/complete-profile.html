@@ -1,0 +1,96 @@
+<div class="profile-wrapper">
+  <div class="profile-card">
+    <h1 class="title">Complete Your Profile</h1>
+    <p class="subtitle">Fill in your details and upload required documents</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="profile-form" enctype="multipart/form-data">
+      <div class="form-grid">
+      
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="FullName" placeholder="Enter full name" />
+          @if (form.get('FullName')?.hasError('required')) {
+            <mat-error>Full name is required</mat-error>
+          }
+          @if (form.get('FullName')?.hasError('minlength')) {
+            <mat-error>Full name must be at least 3 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="Email" type="email" readonly />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Phone Number</mat-label>
+          <input matInput formControlName="PhoneNo" placeholder="Enter phone number" />
+          @if (form.get('PhoneNo')?.hasError('required')) {
+            <mat-error>Phone number is required</mat-error>
+          }
+          @if (form.get('PhoneNo')?.hasError('pattern')) {
+            <mat-error>Please enter a valid 10-digit phone number</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Department Display as Text -->
+        <div class="department-display full-width">
+          <label>Department</label>
+          <div class="department-value">
+            {{ getDepartmentName(form.get('DepartmentId')?.value) }}
+          </div>
+        </div>
+
+        <div class="file-upload-section full-width">
+          <h3>Required Documents</h3>
+          <p class="file-note">All documents are required (PDF, JPG, or PNG, max 5MB each)</p>
+          
+          <div class="file-upload-grid">
+            <div class="file-upload-item">
+              <label>Degree Certificate *</label>
+              <input type="file" (change)="onFileSelected($event, 'DegreeCertificate')" accept=".pdf,.jpg,.jpeg,.png" required>
+              <small>PDF, JPG, or PNG</small>
+            </div>
+
+            <div class="file-upload-item">
+              <label>+2 Certificate *</label>
+              <input type="file" (change)="onFileSelected($event, 'PlusTwoCertificate')" accept=".pdf,.jpg,.jpeg,.png" required>
+              <small>PDF, JPG, or PNG</small>
+            </div>
+
+            <div class="file-upload-item">
+              <label>SSLC Certificate *</label>
+              <input type="file" (change)="onFileSelected($event, 'SSLCertificate')" accept=".pdf,.jpg,.jpeg,.png" required>
+              <small>PDF, JPG, or PNG</small>
+            </div>
+
+            <div class="file-upload-item">
+              <label>Experience Certificate</label>
+              <input type="file" (change)="onFileSelected($event, 'ExperienceCertificate')" accept=".pdf,.jpg,.jpeg,.png">
+              <small>PDF, JPG, or PNG (Optional)</small>
+            </div>
+
+            <div class="file-upload-item">
+              <label>Passport *</label>
+              <input type="file" (change)="onFileSelected($event, 'Passport')" accept=".pdf,.jpg,.jpeg,.png" required>
+              <small>PDF, JPG, or PNG</small>
+            </div>
+
+            <div class="file-upload-item">
+              <label>Aadhar Card *</label>
+              <input type="file" (change)="onFileSelected($event, 'Aadhar')" accept=".pdf,.jpg,.jpeg,.png" required>
+              <small>PDF, JPG, or PNG</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button mat-raised-button color="primary" class="submit-btn" [disabled]="loading || form.invalid">
+        {{ loading ? 'Updating Profile...' : 'Complete Profile' }}
+        @if (loading) {
+          <mat-spinner diameter="20" class="spinner"></mat-spinner>
+        }
+      </button>
+    </form>
+  </div>
+</div>

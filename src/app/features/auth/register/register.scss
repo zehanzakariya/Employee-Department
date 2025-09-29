@@ -1,0 +1,174 @@
+.register-container {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
+}
+
+.form-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  width: 120%;
+  max-width: 500px;
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1.75rem;
+  }
+  
+  .subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  
+  .field-label {
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+  }
+  
+  .gender-options {
+    display: flex;
+    gap: 1.5rem;
+    
+    .gender-option {
+      margin: 0.25rem 0;
+    }
+  }
+  
+  .mat-error {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #e3f2fd;
+  border-radius: 6px;
+  color: #0d47a1;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  
+  mat-icon {
+    color: #1976d2;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  
+  strong {
+    font-weight: 600;
+  }
+}
+
+.submit-button {
+  height: 48px;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+// Material overrides
+::ng-deep {
+  .register-container {
+    .mat-form-field {
+      &.mat-form-field-appearance-outline {
+        .mat-form-field-outline {
+          color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .mat-form-field-outline-thick {
+          color: #3f51b5;
+        }
+        
+        &.mat-focused {
+          .mat-form-field-outline-thick {
+            color: #3f51b5;
+          }
+          
+          .mat-form-field-label {
+            color: #3f51b5;
+          }
+        }
+      }
+    }
+    
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+    
+    .mat-form-field-subscript-wrapper {
+      position: static;
+      margin-top: 0.25rem;
+    }
+    
+    .mat-radio-button {
+      .mat-radio-label {
+        margin-bottom: 0;
+      }
+      
+      &.mat-radio-checked {
+        .mat-radio-outer-circle {
+          border-color: #3f51b5;
+        }
+        
+        .mat-radio-inner-circle {
+          background-color: #3f51b5;
+        }
+      }
+    }
+    
+    .mat-datepicker-toggle {
+      color: #6b7280;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 600px) {
+  .register-container {
+    padding: 1rem;
+  }
+  
+  .form-container {
+    padding: 1.5rem;
+  }
+  
+  .form-field-group {
+    .gender-options {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}

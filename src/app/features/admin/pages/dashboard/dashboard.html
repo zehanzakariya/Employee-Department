@@ -1,0 +1,157 @@
+<div class="dashboard-grid">
+  <div class="stats-grid">
+    <mat-card class="stat-card card-gradient shadow-card">
+      <mat-card-content class="stat-content">
+        <div class="stat-inner">
+          <div class="stat-text">
+            <p class="stat-label">Total Employees</p>
+            <p class="stat-value">{{ totalEmployees() }}</p>
+            <p class="stat-trend success">
+              <mat-icon>arrow_upward</mat-icon> Total Employees
+            </p>
+          </div>
+          <div class="stat-icon">
+            <mat-icon>people</mat-icon>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card card-gradient shadow-card">
+      <mat-card-content class="stat-content">
+        <div class="stat-inner">
+          <div class="stat-text">
+            <p class="stat-label">Departments</p>
+            <p class="stat-value">{{ activeDepartments() }}</p> 
+            <p class="stat-trend">Active departments</p> 
+          </div>
+          <div class="stat-icon">
+            <mat-icon>business</mat-icon>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card card-gradient shadow-card">
+      <mat-card-content class="stat-content">
+        <div class="stat-inner">
+          <div class="stat-text">
+            <p class="stat-label">Pending Approvals</p>
+            <p class="stat-value">{{ pendingEmployees().length }}</p>
+            @if (pendingEmployees().length > 0) {
+              <p class="stat-trend danger">
+                <mat-icon>arrow_downward</mat-icon> Needs attention
+              </p>
+            } @else {
+              <p class="stat-trend success">
+                <mat-icon>check_circle</mat-icon> All clear
+              </p>
+            }
+          </div>
+          <div class="stat-icon">
+            <mat-icon>notifications</mat-icon>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card card-gradient shadow-card">
+      <mat-card-content class="stat-content">
+        <div class="stat-inner">
+          <div class="stat-text">
+            <p class="stat-label">Projects</p>
+            <p class="stat-value">{{ totalProjects() }}</p>
+            @if (totalProjects()) {
+              <p class="stat-trend warning">
+                <mat-icon>event</mat-icon> {{ totalProjects() }} active
+              </p>
+            } @else {
+              <p class="stat-trend success">
+                <mat-icon>check_circle</mat-icon> No active projects
+              </p>
+            }
+          </div>
+          <div class="stat-icon">
+            <mat-icon>description</mat-icon>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-grid">
+    <mat-card class="chart-card shadow-elevated">
+      <mat-card-header>
+        <mat-card-title>Department Employee Distribution</mat-card-title>
+        <mat-card-subtitle>Number of employees per department</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas baseChart [data]="employeeChartData()" [options]="employeeChartOptions" [type]="'bar'"></canvas>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="chart-card shadow-elevated">
+      <mat-card-header>
+        <mat-card-title>Department Size Comparison</mat-card-title>
+        <mat-card-subtitle>Employee distribution across departments</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas baseChart [data]="departmentChartData()" [options]="departmentChartOptions" [type]="'pie'"></canvas>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Pending Approvals & Awards -->
+  <div class="info-grid">
+    <mat-card class="info-card shadow-elevated">
+      <mat-card-header>
+        <mat-card-title>Pending Employee Approvals</mat-card-title>
+        <mat-card-subtitle>Employee registration requests awaiting approval</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="approval-list">
+          @if (pendingEmployees().length === 0) {
+            <div class="empty-state">
+              <mat-icon>check_circle</mat-icon>
+              <p>No pending approvals</p>
+            </div>
+          } @else {
+            @for (employee of pendingEmployees(); track employee.userProfileId) {
+              <div class="approval-item">
+                <div class="employee-info">
+                  <div class="employee-details">
+                    <p class="employee-name">{{ employee.fullName }}</p>
+                    <p class="employee-email">{{ employee.email }}</p>
+                    <p class="employee-department">{{ employee.departmentName }}</p>
+                  </div>
+                  <span class="approval-status pending">Pending</span>
+                </div>
+                <div class="approval-actions">
+                  <button mat-raised-button color="primary" (click)="approveEmployee(employee)">
+                    <mat-icon>check</mat-icon> Approve
+                  </button>
+                  <button mat-button color="warn" (click)="rejectEmployee(employee, 'Not a good fit')">
+                    <mat-icon>close</mat-icon> Reject
+                  </button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="info-card shadow-elevated">
+      <mat-card-header>
+        <mat-card-title>Employee Awards</mat-card-title>
+        <mat-card-subtitle>Recent recognitions and achievements</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="award-list">
+        
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

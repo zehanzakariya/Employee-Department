@@ -1,0 +1,86 @@
+<div class="employee-layout">
+  <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
+    
+      <div class="sidebar-header">
+          <div class="logo">
+              <mat-icon>work</mat-icon>
+              @if (!sidebarCollapsed) {
+              <span>Employee Portal</span>
+              }
+          </div>
+          <button mat-icon-button class="toggle-btn" (click)="toggleSidebar()">
+              <mat-icon>{{ sidebarCollapsed ? 'menu' : 'chevron_left' }}</mat-icon>
+          </button>
+      </div>
+      <nav class="sidebar-nav">
+          <!-- <a routerLink="/employee/dashboard" routerLinkActive="active" class="nav-item">
+              <mat-icon>dashboard</mat-icon>
+              @if (!sidebarCollapsed) {
+              <span>Dashboard</span>
+              }
+          </a> -->
+
+          <a routerLink="/employee/task-view" routerLinkActive="active" class="nav-item">
+              <mat-icon>task</mat-icon>
+              @if (!sidebarCollapsed) {
+              <span>My Tasks</span>
+              }
+            </a>
+
+          <a routerLink="/employee/profile" routerLinkActive="active" class="nav-item">
+              <mat-icon>person</mat-icon>
+              @if (!sidebarCollapsed) {
+              <span>Profile</span>
+              }
+          </a>
+      </nav>
+
+      <!-- User Section -->
+      <div class="user-section">
+          <div class="user-info">
+              <div class="user-avatar">
+                  {{ user?.fullName?.charAt(0) || 'NA' }}
+              </div>
+              @if (!sidebarCollapsed) {
+              <div class="user-details">
+                  <div class="user-name">{{ user?.fullName || 'User' }}</div>
+                  <div class="user-role">Employee</div>
+              </div>
+              }
+          </div>
+
+          <button mat-icon-button class="logout-btn" (click)="logout()" matTooltip="Logout">
+              <mat-icon>logout</mat-icon>
+          </button>
+      </div>
+  </aside>
+
+ 
+  <main class="main-content" [class.collapsed]="sidebarCollapsed">
+      <header class="main-header">
+          <div class="header-content">
+              <div class="header-left">
+                  <h1 class="page-title">
+                      <ng-content select="[pageTitle]"></ng-content>
+                  </h1>
+              </div>
+              <div class="header-actions">
+                  <!-- <button mat-icon-button class="notification-btn">
+                      <mat-icon [matBadge]="3" matBadgeColor="warn">notifications</mat-icon>
+                  </button> -->
+                  <div class="current-time">{{ currentTime | date:'medium' }}</div>
+              </div>
+          </div>
+      </header>
+
+      <div class="content-wrapper">
+          <router-outlet></router-outlet>
+      </div>
+
+      <footer class="main-footer">
+          <div class="footer-content">
+              <p>&copy; 2024 Employee Management System. All rights reserved.</p>
+          </div>
+      </footer>
+  </main>
+</div>

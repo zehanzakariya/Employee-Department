@@ -1,0 +1,63 @@
+<div class="projects-page">
+  <header class="page-header">
+    <h1>Project Management</h1>
+    <p>Create and manage projects across departments</p>
+  </header>
+
+  <div class="header-actions">
+    <button mat-raised-button color="primary" (click)="openDialog()">
+      <mat-icon>add</mat-icon> New Project
+    </button>
+  </div>
+
+  @if (!loading && projects.length) {
+    <div class="projects-grid">
+      @for (project of projects; track project.projectId) {
+        <mat-card class="project-card">
+          <mat-card-header>
+            <mat-card-title>{{ project.projectName }}</mat-card-title>
+            <mat-card-subtitle>
+              Department: {{ project.departmentName || 'N/A' }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <p class="project-description">{{ project.description || 'No description' }}</p>
+            
+            <div class="project-details">
+              <div class="detail-item">
+                <mat-icon>event</mat-icon>
+                <span>Deadline: {{ project.deadline | date:'mediumDate' }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+          
+          <mat-card-actions align="end">
+            <button mat-button color="primary" (click)="openDialog(project)">
+              <mat-icon>edit</mat-icon> Edit
+            </button>
+            <button mat-button color="warn" (click)="deleteProject(project.projectId, project.projectName)">
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+
+  @if (loading) {
+    <div class="loading-spinner">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  }
+
+  @if (!loading && !projects.length) {
+    <div class="no-data">
+      <mat-icon>inbox</mat-icon>
+      <p>No projects found</p>
+      <button mat-raised-button color="primary" (click)="openDialog()">
+        Create Your First Project
+      </button>
+    </div>
+  }
+</div>

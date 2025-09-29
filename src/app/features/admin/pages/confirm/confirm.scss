@@ -1,0 +1,56 @@
+.confirmation-dialog {
+    min-width: 400px;
+    
+    .mat-dialog-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      
+      mat-icon {
+        color: #3f51b5;
+      }
+    }
+    
+    .employee-info {
+      margin-bottom: 20px;
+      
+      .info-row {
+        display: flex;
+        margin-bottom: 8px;
+        
+        .label {
+          font-weight: 500;
+          width: 120px;
+          color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .value {
+          flex: 1;
+        }
+        
+        .status-active {
+          color: #4caf50;
+          font-weight: 500;
+        }
+        
+        .status-inactive {
+          color: #f44336;
+          font-weight: 500;
+        }
+      }
+    }
+    
+    .confirmation-message {
+      margin-bottom: 16px;
+      
+      p {
+        margin: 0;
+        line-height: 1.5;
+      }
+    }
+    
+    .mat-dialog-actions {
+      padding: 16px 0 0;
+    }
+  }

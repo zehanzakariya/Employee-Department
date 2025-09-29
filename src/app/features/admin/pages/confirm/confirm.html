@@ -1,0 +1,60 @@
+<div class="confirmation-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>{{ data.isActivating ? 'check_circle' : 'block' }}</mat-icon>
+    {{ data.isActivating ? 'Activate Employee' : 'Deactivate Employee' }}
+  </h2>
+
+  <mat-dialog-content>
+    <div class="employee-info">
+      <div class="info-row">
+        <span class="label">Name:</span>
+        <span class="value">{{ data.employee.fullName }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Email:</span>
+        <span class="value">{{ data.employee.email }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Department:</span>
+        <span class="value">{{ data.employee.departmentName }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Current Status:</span>
+        <span class="value" [class.status-active]="data.employee.isActive" [class.status-inactive]="!data.employee.isActive">
+          {{ data.employee.isActive ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="confirmation-message">
+      @if (data.isActivating) {
+        <p>Are you sure you want to activate this employee? They will be able to access the system.</p>
+      }
+      @if (!data.isActivating) {
+        <p>Are you sure you want to deactivate this employee? They will no longer be able to access the system.</p>
+      }
+    </div>
+
+    <!-- @if (!data.isActivating) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Reason for deactivation (optional)</mat-label>
+        <textarea matInput [(ngModel)]="reason" rows="3" placeholder="Enter reason for deactivation"></textarea>
+      </mat-form-field>
+    } -->
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button 
+      mat-raised-button 
+      [color]="data.isActivating ? 'primary' : 'warn'" 
+      (click)="confirm()"
+      [disabled]="loading">
+      @if (loading) {
+        Processing...
+      } @else {
+        {{ data.isActivating ? 'Activate' : 'Deactivate' }}
+      }
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,61 @@
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 720px; /* keeps form neat without forcing overflow */
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+
+  .half-width {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex,
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  min-height: 56px;       
+  align-items: center;    
+  box-sizing: border-box;
+}
+
+::ng-deep input.mat-input-element,
+::ng-deep textarea.mat-input-element {
+  padding: 10px 0;       
+  line-height: 1.4;      
+  height: auto;
+  box-sizing: border-box;
+}
+
+
+::ng-deep mat-dialog-content {
+  overflow-y: auto;
+  overflow-x: hidden;      /* hiding horizontal scrollbar */
+  max-height: calc(100vh - 160px); 
+  padding: 16px 24px;
+  box-sizing: border-box;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .dialog-form {
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

@@ -1,0 +1,348 @@
+
+.dashboard-container {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .welcome-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin-bottom: 24px;
+    border-radius: 16px;
+    overflow: hidden;
+  
+    .welcome-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px;
+  
+      h2 {
+        margin: 0 0 8px 0;
+        font-size: 24px;
+        font-weight: 700;
+      }
+  
+      p {
+        margin: 0;
+        opacity: 0.9;
+      }
+  
+      .welcome-stats {
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          background: rgba(255, 255, 255, 0.2);
+          padding: 16px;
+          border-radius: 12px;
+          backdrop-filter: blur(10px);
+  
+          mat-icon {
+            font-size: 32px;
+            width: 32px;
+            height: 32px;
+          }
+  
+          .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            display: block;
+          }
+  
+          .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+  }
+  
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .chart-card, .projects-card, .meetings-card, .stats-card {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+  
+    mat-card-header {
+      padding: 24px 24px 16px;
+  
+      mat-card-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2d3748;
+      }
+  
+      mat-card-subtitle {
+        color: #718096;
+      }
+    }
+  
+    mat-card-content {
+      padding: 0 24px 24px;
+    }
+  }
+  
+  .chart-card {
+    .chart-container {
+      position: relative;
+      height: 200px;
+      margin-bottom: 20px;
+    }
+  
+    .chart-stats {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+  
+      .stat {
+        .stat-number {
+          display: block;
+          font-size: 18px;
+          font-weight: 700;
+          color: #2d3748;
+        }
+  
+        .stat-label {
+          font-size: 12px;
+          color: #718096;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+      }
+    }
+  }
+  
+  .projects-card {
+    .project-item {
+      padding: 16px 0;
+      border-bottom: 1px solid #e2e8f0;
+  
+      &:last-child {
+        border-bottom: none;
+      }
+  
+      .project-info {
+        margin-bottom: 12px;
+  
+        h4 {
+          margin: 0 0 8px 0;
+          font-size: 16px;
+          font-weight: 600;
+          color: #2d3748;
+        }
+  
+        .project-meta {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 12px;
+  
+          .deadline {
+            color: #718096;
+          }
+  
+          .status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+  
+            &.status-on-track {
+              background: #d1fae5;
+              color: #065f46;
+            }
+  
+            &.status-at-risk {
+              background: #fef3c7;
+              color: #92400e;
+            }
+  
+            &.status-delayed {
+              background: #fee2e2;
+              color: #dc2626;
+            }
+          }
+        }
+      }
+  
+      .project-progress {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+  
+        mat-progress-bar {
+          flex: 1;
+          height: 8px;
+          border-radius: 4px;
+  
+          &.status-on-track {
+            ::ng-deep .mdc-linear-progress__bar-inner {
+              border-color: #10b981;
+            }
+          }
+  
+          &.status-at-risk {
+            ::ng-deep .mdc-linear-progress__bar-inner {
+              border-color: #f59e0b;
+            }
+          }
+  
+          &.status-delayed {
+            ::ng-deep .mdc-linear-progress__bar-inner {
+              border-color: #ef4444;
+            }
+          }
+        }
+  
+        .progress-text {
+          font-size: 12px;
+          font-weight: 600;
+          color: #718096;
+          min-width: 35px;
+        }
+      }
+    }
+  }
+  
+  .meetings-card {
+    .meeting-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #e2e8f0;
+  
+      &:last-child {
+        border-bottom: none;
+      }
+  
+      .meeting-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+  
+        mat-icon {
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+      }
+  
+      .meeting-details {
+        flex: 1;
+  
+        h4 {
+          margin: 0 0 4px 0;
+          font-size: 14px;
+          font-weight: 600;
+          color: #2d3748;
+        }
+  
+        .meeting-meta {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 12px;
+  
+          .meeting-time {
+            color: #667eea;
+            font-weight: 500;
+          }
+  
+          .meeting-participants {
+            color: #718096;
+          }
+        }
+      }
+  
+      .meeting-action {
+        color: #718096;
+  
+        &:hover {
+          color: #667eea;
+        }
+      }
+    }
+  }
+  
+  .stats-card {
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+  
+      .stat-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: #f8fafc;
+        border-radius: 12px;
+        transition: transform 0.2s ease;
+  
+        &:hover {
+          transform: translateY(-2px);
+        }
+  
+        mat-icon {
+          font-size: 32px;
+          width: 32px;
+          height: 32px;
+        }
+  
+        .stat-content {
+          .stat-number {
+            display: block;
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+          }
+  
+          .stat-label {
+            font-size: 12px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+        }
+      }
+    }
+  }
+  
+
+  @media (max-width: 768px) {
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .welcome-content {
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+    }
+  
+    .stats-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }

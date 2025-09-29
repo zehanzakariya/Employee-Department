@@ -1,0 +1,173 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>My Profile</h1>
+    <p>Manage your personal information and account settings</p>
+  </div>
+
+  @if (profileLoading) {
+    <div class="loading-spinner">
+      <mat-spinner></mat-spinner>
+      <p>Loading profile...</p>
+    </div>
+  } @else if (employeeData) {
+    <div class="profile-content">
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <mat-card-title>Personal Information</mat-card-title>
+          <mat-card-subtitle>Update your personal details</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="profileForm" class="profile-form">
+            <div class="form-grid">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="fullName" placeholder="Enter your full name" />
+                @if (profileForm.get('fullName')?.hasError('required')) {
+                  <mat-error>Full name is required</mat-error>
+                }
+                @if (profileForm.get('fullName')?.hasError('minlength')) {
+                  <mat-error>Full name must be at least 3 characters</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" type="email" readonly />
+                <mat-icon matSuffix>lock</mat-icon>
+                <mat-hint>Email cannot be changed</mat-hint>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Phone Number</mat-label>
+                <input matInput formControlName="phoneNo" placeholder="Enter phone number" />
+                @if (profileForm.get('phoneNo')?.hasError('pattern')) {
+                  <mat-error>Please enter a valid 10-digit phone number</mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div class="documents-section">
+              <h3>Documents</h3>
+              <p class="documents-summary">Uploaded {{ getDocumentCount() }}/6 documents</p>
+              
+              <div class="document-actions">
+                <button mat-stroked-button color="primary" (click)="viewDocuments()">
+                  <mat-icon>visibility</mat-icon>
+                  View Documents
+                </button>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button mat-raised-button color="primary" (click)="updateProfile()" [disabled]="loading">
+                {{ loading ? 'Updating...' : 'Update Profile' }}
+                @if (loading) {
+                  <mat-spinner diameter="20" class="spinner"></mat-spinner>
+                }
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Change Password Card -->
+      <mat-card class="password-card">
+        <mat-card-header>
+          <mat-card-title>Change Password</mat-card-title>
+          <mat-card-subtitle>Update your account password</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="passwordForm" class="password-form">
+            <div class="form-grid">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Current Password</mat-label>
+                <input matInput formControlName="currentPassword" type="password" placeholder="Enter current password" />
+                @if (passwordForm.get('currentPassword')?.hasError('required')) {
+                  <mat-error>Current password is required</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>New Password</mat-label>
+                <input matInput formControlName="newPassword" type="password" placeholder="Enter new password" />
+                @if (passwordForm.get('newPassword')?.hasError('required')) {
+                  <mat-error>New password is required</mat-error>
+                }
+                @if (passwordForm.get('newPassword')?.hasError('minlength')) {
+                  <mat-error>Password must be at least 6 characters</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Confirm New Password</mat-label>
+                <input matInput formControlName="confirmPassword" type="password" placeholder="Confirm new password" />
+                @if (passwordForm.get('confirmPassword')?.hasError('required')) {
+                  <mat-error>Please confirm your new password</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            @if (passwordForm.hasError('passwordMismatch')) {
+              <mat-error class="password-error">New passwords do not match</mat-error>
+            }
+
+            <div class="form-actions">
+              <button mat-raised-button color="primary" (click)="changePassword()" [disabled]="passwordLoading">
+                {{ passwordLoading ? 'Changing...' : 'Change Password' }}
+                @if (passwordLoading) {
+                  <mat-spinner diameter="20" class="spinner"></mat-spinner>
+                }
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Account Status Card -->
+      <mat-card class="status-card">
+        <mat-card-header>
+          <mat-card-title>Account Status</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="status-info">
+            <div class="status-item">
+              <span class="label">Profile Completion:</span>
+              <span class="value" [class.completed]="employeeData.isProfileCompleted">
+                {{ employeeData.isProfileCompleted ? 'Complete' : 'Incomplete' }}
+              </span>
+            </div>
+            
+            <div class="status-item">
+              <span class="label">Account Status:</span>
+              <span class="value" [class.active]="employeeData.isActive">
+                {{ employeeData.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </div>
+            
+            <div class="status-item">
+              <span class="label">Employee ID:</span>
+              <span class="value">{{ employeeData.employeeId }}</span>
+            </div>
+            
+            <div class="status-item">
+              <span class="label">Department:</span>
+              <span class="value">{{ employeeData.departmentName }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  } @else {
+    <div class="error-state">
+      <mat-icon>error_outline</mat-icon>
+      <h3>Failed to load profile</h3>
+      <p>Unable to load your profile information. Please try again.</p>
+      <button mat-raised-button color="primary" (click)="loadEmployeeProfile()">
+        <mat-icon>refresh</mat-icon>
+        Retry
+      </button>
+    </div>
+  }
+</div>
